@@ -2,13 +2,13 @@ from PIL import Image, ImageFont, ImageDraw
 import os
 
 
-folder_path = "photos"
+folder_path = "tests/photos2"
 
 for filename in os.listdir(folder_path):
     if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
         file_path = os.path.join(folder_path, filename)
         with Image.open(file_path) as img:
-            scale = 0.15
+            scale = 0.2  # масштаб, но можно назвать и по-другому -- качество фото (лучше всего 0 < scale <= 1)
 
             width, height = img.size
             aspect_ratio = height / width
@@ -18,12 +18,14 @@ for filename in os.listdir(folder_path):
 
             pixels = img_resized.load()
 
-            chars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "[::-1]
+            # chars = '$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,"^`\'. '[::-1]  # лучше с цветным фильтром и большими фотками
+            chars = "#8XOHLTI)i=+;:,. "[::-1]  # лучше с ч/б фильтрами и маленькими фотками
 
-            font = ImageFont.truetype("RobotoMono.ttf", 20)
+            font_size = int(scale * 200)
+            font = ImageFont.truetype("RobotoMono.ttf", font_size)
 
-            char_width = 12
-            char_height = 24
+            char_width = (font_size // 2) + 2
+            char_height = char_width * 2
             ascii_width = new_width * char_width
             ascii_height = new_height * char_height
 
@@ -40,12 +42,15 @@ for filename in os.listdir(folder_path):
 
                     x = j * char_width
                     y = i * char_height
-                    draw.text((x, y), char, font=font, fill=(r, g, b))
+                    draw.text((x, y), char, font=font, fill=(r, g, b))  # цветной фильтр
+                    # draw.text((x, y), char, font=font, fill=(average, average, average))  # ч/б с тенями фильтр
+                    # draw.text((x, y), char, font=font, fill=("#FFFFFF"))  # ч/б фильтр
 
                     #     text_atr.write(char)
                     # text_atr.write("\n")
 
             new_filename = 'ASCII_' + filename
-            new_folder_path = "ascii_photos"
+            new_folder_path = "tests/ascii_photos2"
+            os.makedirs(new_folder_path, exist_ok=True)
             new_path = os.path.join(new_folder_path, new_filename)
             ASCII_Art.save(new_path)
