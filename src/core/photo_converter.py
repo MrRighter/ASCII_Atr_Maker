@@ -17,6 +17,8 @@ def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str
         image: готовый ASCII рисунок
     """
 
+    image = image.convert("RGB")
+
     current_file = Path(__file__).resolve()
     fonts_dir = current_file.parent.parent / "assets" / "fonts"
 
