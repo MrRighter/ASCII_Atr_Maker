@@ -1,3 +1,4 @@
+from pathlib import Path
 import flet as ft
 from src.core.app_logic import AppLogic
 
@@ -9,6 +10,60 @@ def main(page: ft.Page):
 
     # создаём логику и UI для приложения
     app = AppLogic(page)
+
+    current_settings = {}
+
+    alphabet_dict = {
+        "Детализированный": [
+            "Лучше подойдёт с цветным фильтром, большими фотками и RobotoMono шрифтом",
+            "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`\'. "[::-1],
+        ],
+        "Простой": [
+            "Лучше подойдёт с ч/б фильтрами, маленькими фотками и RobotoMono шрифтом",
+            "#8XOHLTI)i=+;:,. "[::-1],
+        ],
+        "Блочный": [
+            "Подойдёт любое фото с любым фильтром и блочным шрифтом",
+            "█▓▒░ "[::-1],
+        ],
+    }
+
+    current_file = Path(__file__).resolve()
+    fonts_dir = current_file.parent.parent / "assets" / "fonts"
+
+    font_dict = {
+        "RobotoMono": [
+            "Шрифт для заполнения обычными символами клавиатуры",
+            fonts_dir / "RobotoMono.ttf",
+        ],
+        "GothicA1": [
+            "Первый из подвида блочных шрифтов",
+            fonts_dir / "GothicA1.ttf",
+        ],
+        "MPLUS1p": [
+            "Второй из подвида блочных шрифтов",
+            fonts_dir / "MPLUS1p.ttf",
+        ],
+        "NotoSansJP": [
+            "Третий из подвида блочных шрифтов",
+            fonts_dir / "NotoSansJP.ttf",
+        ],
+    }
+
+    filling_dict = {
+        "Разноцветное фото": [
+            "Картинка на выходе будет цветной, как в оригинале",
+            "colored",
+        ],
+        "Фото в ч/б (1)": [
+            "Картинка на выходе будет в ч/б с 'градацией серого'",
+            "monochrome1",
+        ],
+        "Фото в ч/б (2)": [
+            "Картинка на выходе будет в ч/б с монохромным цветом",
+            "monochrome2",
+        ],
+    }
 
     # создаем элементы UI
     open_button = ft.OutlinedButton(
@@ -55,7 +110,7 @@ def main(page: ft.Page):
 
     image_view = ft.Image(
         src="../assets/icon.png",
-        col={"xs": 12, "sm": 7.5, "md": 6.5, "lg": 5.5, "xl": 4.5},
+        col={"xs": 12, "sm": 8, "md": 7, "lg": 5, "xl": 4},
         border_radius=ft.BorderRadius.only(
             top_left=10,
             top_right=10,
@@ -73,7 +128,7 @@ def main(page: ft.Page):
     progress_bar = ft.ProgressBar(
         visible=False,
         color=ft.Colors.GREEN,
-        col={"xs": 12, "sm": 8, "md": 7, "lg": 6, "xl": 5},
+        col={"xs": 12, "sm": 9, "md": 8, "lg": 7, "xl": 6},
     )
 
     # кнопка с настройками изображения поверх всего приложения
@@ -87,8 +142,10 @@ def main(page: ft.Page):
         """Высвечивает сообщение о выбранном значении слайдера"""
         scale_value = round(e.control.value, 2)
         message_scale.value = f"Выбранное значение: {scale_value}"
+        # обновляем настройки
+        current_settings['scale'] = scale_value
+        app.set_settings(**current_settings)
         page.update()
-        return scale_value
 
     scale_slider = ft.Slider(
         min=0.02,
@@ -99,27 +156,14 @@ def main(page: ft.Page):
         active_color=ft.Colors.GREEN,
     )
 
-    ALPHABET_DICT = {
-        "Детализированный": [
-            "Лучше подойдёт с цветным фильтром и большими фотками",
-            "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`\'. "[::-1],
-        ],
-        "Простой": [
-            "Лучше подойдёт с ч/б фильтрами и маленькими фотками",
-            "#8XOHLTI)i=+;:,. "[::-1],
-        ],
-        "Блочный": [
-            "Подойдёт любое фото с любым фильтром",
-            "█▓▒░ "[::-1],
-        ],
-    }
-
     def alfabet_dropdown_changed(e: ft.Event[ft.DropdownM2]):
         """Высвечивает и возвращает данные по выбранному алфавиту"""
         alfabet = e.control.value
-        message_alfabet.value = f"Выбранный алфавит: {alfabet}\n{ALPHABET_DICT[alfabet][0]}"
+        message_alfabet.value = f"Выбранный алфавит: {alfabet}\n{alphabet_dict[alfabet][0]}"
+        # обновляем настройки
+        current_settings['chars'] = alphabet_dict[alfabet][1]
+        app.set_settings(**current_settings)
         page.update()
-        return ALPHABET_DICT[alfabet][1]
 
     alfabet_dropdown = ft.DropdownM2(
         value="Простой",
@@ -133,31 +177,14 @@ def main(page: ft.Page):
         ],
     )
 
-    FONT_DICT = {
-        "GothicA1": [
-            "Первый из подвида шрифтов для блочного алфавита",
-            "..\\assets\\fonts\\GothicA1.ttf",
-        ],
-        "MPLUS1p": [
-            "Второй из подвида шрифтов для блочного алфавита",
-            "..\\assets\\fonts\\MPLUS1.ttf",
-        ],
-        "NotoSansJP": [
-            "Третий из подвида шрифтов для блочного алфавита",
-            "..\\assets\\fonts\\NotoSansJP.ttf",
-        ],
-        "RobotoMono": [
-            "Шрифт для заполнения классическими символами",
-            "",
-        ],
-    }
-
     def font_dropdown_changed(e: ft.Event[ft.DropdownM2]):
         """Высвечивает и возвращает данные по выбранному шрифту"""
         font = e.control.value
-        message_font.value = f"Выбранный шрифт: {font}\n{FONT_DICT[font][0]}"
+        message_font.value = f"Выбранный шрифт: {font}\n{font_dict[font][0]}"
+        # обновляем настройки
+        current_settings['name_font'] = font_dict[font][1]
+        app.set_settings(**current_settings)
         page.update()
-        return FONT_DICT[font][1]
 
     font_dropdown = ft.DropdownM2(
         value="RobotoMono",
@@ -172,27 +199,14 @@ def main(page: ft.Page):
         ],
     )
 
-    FILLING_DICT = {
-        "Разноцветное фото": [
-            "Картинка на выходе будет цветной, как в оригинале",
-            "colored",
-        ],
-        "Фото в ч/б (1)": [
-            "Картинка на выходе будет в ч/б, но с разными его оттенками",
-            "monochrome1",
-        ],
-        "Фото в ч/б (2)": [
-            "Картинка на выходе будет в ч/б, но с монохромным цветом",
-            "monochrome2",
-        ],
-    }
-
     def filling_dropdown_changed(e: ft.Event[ft.DropdownM2]):
         """Высвечивает и возвращает данные по выбранной цветовой палитре"""
         filling = e.control.value
-        message_filling.value = f"Выбранное цветовое решение: {filling}\n{FILLING_DICT[filling][0]}"
+        message_filling.value = f"Выбранное цветовое решение: {filling}\n{filling_dict[filling][0]}"
+        # обновляем настройки
+        current_settings['filling'] = filling_dict[filling][1]
+        app.set_settings(**current_settings)
         page.update()
-        return FILLING_DICT[filling][1]
 
     filling_dropdown = ft.DropdownM2(
         value="Разноцветное фото",
@@ -242,13 +256,16 @@ def main(page: ft.Page):
         sheet=sheet,
     )
 
+    # устанавливаем значения по умолчанию
+    current_settings = {
+        "scale": scale_slider.value,
+        "chars": alphabet_dict[alfabet_dropdown.value][1],
+        "name_font": font_dict[font_dropdown.value][1],
+        "filling": filling_dict[filling_dropdown.value][1],
+    }
+
     # инициализируем настройки для будущего фото
-    app.set_settings(
-        scale=scale_slider.value,
-        chars=ALPHABET_DICT[alfabet_dropdown.value][1],
-        name_font=FONT_DICT[font_dropdown.value][1],
-        filling=FILLING_DICT[filling_dropdown.value][1],
-    )
+    app.set_settings(**current_settings)
 
     # Добавляем элементы на страницу
     page.add(

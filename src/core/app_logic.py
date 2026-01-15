@@ -100,7 +100,8 @@ class AppLogic:
         self.loading_text.visible = False
         self.page.update()
 
-    def ascii_converter(self, image: Image.Image, scale: float, chars: str, name_font: str, filling: str) -> Image.Image:
+    @staticmethod
+    def ascii_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str) -> Image.Image:
         """Выполняет преобразование в фото в ASCII рисунок"""
         result = photo_converter(
             image=image,
@@ -118,15 +119,17 @@ class AppLogic:
         self.loading_text.visible = True
         self.page.update()
 
-        # try:
-        self.final_image = await asyncio.to_thread(self.ascii_converter, self.current_image, self.scale, self.chars, self.name_font, self.filling)
-        await self.update_image_view(self.final_image)
-        self.save_button.disabled = False
-        self.save_text_button.disabled = False
-        self.copy_text_button.disabled = False
-        self.page.update()
-        # except Exception as ex:
-        #     self.show_snackbar(f"Ошибка при преобразовании: {ex}")
-        #     self.progress_bar.visible = False
-        #     self.loading_text.visible = False
-        #     self.page.update()
+        try:
+            self.final_image = await asyncio.to_thread(
+                self.ascii_converter, self.current_image, self.scale, self.chars, self.name_font, self.filling
+            )
+            await self.update_image_view(self.final_image)
+            self.save_button.disabled = False
+            self.save_text_button.disabled = False
+            self.copy_text_button.disabled = False
+            self.page.update()
+        except Exception as ex:
+            self.show_snackbar(f"Ошибка при преобразовании: {ex}")
+            self.progress_bar.visible = False
+            self.loading_text.visible = False
+            self.page.update()
