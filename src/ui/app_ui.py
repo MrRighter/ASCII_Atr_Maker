@@ -1,13 +1,16 @@
+import sys
 from pathlib import Path
 import flet as ft
-from src.core.app_logic import AppLogic
+
+sys.path.append(str(Path(__file__).parent.parent))
+from core.app_logic import AppLogic
 
 
 def main(page: ft.Page):
     page.title = "ASCII Art Maker"
     page.theme_mode = ft.ThemeMode.DARK
-    page.spacing = 16
-    page.padding = 20
+    page.spacing = 10
+    page.padding = 10
 
     # Создаём логику и UI для приложения
     app = AppLogic(page)
@@ -109,7 +112,7 @@ def main(page: ft.Page):
     save_button = ft.OutlinedButton(
         content=ft.Row([
             ft.Icon(ft.Icons.DOWNLOAD, size=20),
-            ft.Text("PNG", size=14, weight=ft.FontWeight.W_500),
+            ft.Text("PNG файл", size=14, weight=ft.FontWeight.W_500),
         ], alignment=ft.MainAxisAlignment.CENTER, spacing=8),
         style=button_style,
         disabled=True,
@@ -121,7 +124,7 @@ def main(page: ft.Page):
     save_text_button = ft.OutlinedButton(
         content=ft.Row([
             ft.Icon(ft.Icons.DESCRIPTION, size=20),
-            ft.Text("Текст", size=14, weight=ft.FontWeight.W_500),
+            ft.Text("TXT файл", size=14, weight=ft.FontWeight.W_500),
         ], alignment=ft.MainAxisAlignment.CENTER, spacing=8),
         style=button_style,
         disabled=True,

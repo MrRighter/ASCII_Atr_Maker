@@ -1,5 +1,5 @@
 [project]
-name = "ASCII Art Maker"
+name = "AsciiArtMaker"
 version = "1.0.0"
 description = "Приложение, основанное на Flet, для конвертации фото в ASCII рисунок (фото, состоящее из символов)."
 readme = "README.md"
@@ -8,23 +8,22 @@ license-files = [
 ]
 requires-python = ">=3.10"
 authors = [
-    { name = "MrRighter", email = "-" }
+    {name = "MrRighter", email = ""}
 ]
 dependencies = [
-    "flet>=0.80.0",
-    "pillow==12.0.0",
-    "uv==0.9.22",
+    "flet>=0.80.2",
+    "pillow>=12.1.0",
 ]
 
 [dependency-groups]
 dev = [
-  "flet[all]>=0.80.0",
+    "flet[all]>=0.80.2",
 ]
 
 [tool.flet]
-org = "-"
+org = "MrRighter"
 product = "ASCII Art Maker"
-company = "-"
+company = "MrRighter"
 copyright = "Copyright (C) 2026 by MrRighter"
 
 [tool.flet.app]

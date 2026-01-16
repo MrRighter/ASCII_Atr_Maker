@@ -4,7 +4,7 @@ from PIL import Image, ImageFont, ImageDraw
 
 def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str) -> Image.Image:
     """
-    Выполняет преобразование в фото в ASCII рисунок.
+    Выполняет преобразование фото в ASCII рисунок.
 
     Args:
         image: входящее необработанное изображение

@@ -1,3 +1,5 @@
+import sys
+from pathlib import Path
 import io
 import base64
 import os
@@ -5,7 +7,9 @@ import asyncio
 from typing import Optional
 import flet as ft
 from PIL import Image
-from src.core.photo_converter import photo_converter
+
+sys.path.append(str(Path(__file__).parent.parent))
+from core.converter import photo_converter
 
 
 class AppLogic:
@@ -78,15 +82,21 @@ class AppLogic:
             self.show_snackbar(f"Изображение не выбрано")
 
     async def handle_save_file(self, e=None):
-        """Скачиваем преобразованное фото в желаемое место"""
-        new_file = await ft.FilePicker().save_file(
-            allowed_extensions=["png", "jpg", "jpeg", "bmp", "webp"],
-            file_name=f"AsciiArt_{self.original_name}.png",
-        )
+        """Скачиваем преобразованное фото в Загрузки"""
+        downloads_path = str(Path.home() / "Downloads") if os.path.exists(str(Path.home() / "Downloads")) \
+            else "/storage/emulated/0/Download"
+        new_file_name = f"AsciiArt_{self.original_name}.png"
+        new_file_path = os.path.join(downloads_path, new_file_name)
+
+        counter = 1
+        while os.path.exists(new_file_path):
+            new_file_name = f"AsciiArt_{self.original_name}_{counter}.png"
+            new_file_path = os.path.join(downloads_path, new_file_name)
+            counter += 1
 
         try:
-            self.final_image.save(new_file)
-            self.show_snackbar(f"Изображение успешно сохранено в '{new_file}'")
+            self.final_image.save(new_file_path)
+            self.show_snackbar(f"Изображение успешно сохранено в '{new_file_path}'")
         except Exception as e:
             self.show_snackbar(f"Ошибка при сохранении: {e}")
 
@@ -102,7 +112,7 @@ class AppLogic:
 
     @staticmethod
     def ascii_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str) -> Image.Image:
-        """Выполняет преобразование в фото в ASCII рисунок"""
+        """Выполняет преобразование фото в ASCII рисунок"""
         result = photo_converter(
             image=image,
             scale=scale,
