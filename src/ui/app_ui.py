@@ -116,7 +116,7 @@ def main(page: ft.Page):
         ], alignment=ft.MainAxisAlignment.CENTER, spacing=8),
         style=button_style,
         disabled=True,
-        on_click=app.handle_save_file,
+        on_click=app.handle_save_png,
         height=50,
         col={"xs": 12, "sm": 6, "md": 4, "lg": 2.4, "xl": 2.4},
     )

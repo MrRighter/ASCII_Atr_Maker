@@ -47,7 +47,7 @@ class AppLogic:
         for name, element in elements.items():
             setattr(self, name, element)
 
-    def show_snackbar(self, message: str):
+    async def show_snackbar(self, message: str):
         """Показать уведомление"""
         self.page.show_dialog(
             ft.SnackBar(
@@ -59,7 +59,6 @@ class AppLogic:
                 ),
             )
         )
-        self.page.update()
 
     async def handle_pick_file(self, e=None):
         """Выбираем и загружаем выбранный файл в программу"""
@@ -72,16 +71,12 @@ class AppLogic:
             file_path = original_file[0].path
             self.original_name = os.path.splitext(os.path.basename(file_path))[0]
             self.current_image = Image.open(file_path)
-
-            # обновляем UI
             self.image_view.src = file_path
-            self.image_view.visible = True
             self.change_button.disabled = False
-            self.page.update()
         else:
-            self.show_snackbar(f"Изображение не выбрано")
+            await self.show_snackbar(f"Изображение не выбрано")
 
-    async def handle_save_file(self, e=None):
+    async def handle_save_png(self, e=None):
         """Скачиваем преобразованное фото в Загрузки"""
         downloads_path = str(Path.home() / "Downloads") if os.path.exists(str(Path.home() / "Downloads")) \
             else "/storage/emulated/0/Download"
@@ -96,9 +91,9 @@ class AppLogic:
 
         try:
             self.final_image.save(new_file_path)
-            self.show_snackbar(f"Изображение успешно сохранено в '{new_file_path}'")
+            await self.show_snackbar(f"Изображение успешно сохранено в '{new_file_path}'")
         except Exception as e:
-            self.show_snackbar(f"Ошибка при сохранении: {e}")
+            await self.show_snackbar(f"Ошибка при сохранении: {e}")
 
     async def update_image_view(self, img_obj: Image.Image):
         """Рисуем преобразованное изображение на экране"""
@@ -106,9 +101,6 @@ class AppLogic:
         img_obj.save(buffer, format="PNG")
         base64_img = base64.b64encode(buffer.getvalue()).decode("utf-8")
         self.image_view.src = base64_img
-        self.progress_bar.visible = False
-        self.loading_text.visible = False
-        self.page.update()
 
     @staticmethod
     def ascii_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str) -> Image.Image:
@@ -137,9 +129,9 @@ class AppLogic:
             self.save_button.disabled = False
             self.save_text_button.disabled = False
             self.copy_text_button.disabled = False
-            self.page.update()
         except Exception as ex:
-            self.show_snackbar(f"Ошибка при преобразовании: {ex}")
+            await self.show_snackbar(f"Ошибка при преобразовании: {ex}")
+        finally:
             self.progress_bar.visible = False
             self.loading_text.visible = False
             self.page.update()
