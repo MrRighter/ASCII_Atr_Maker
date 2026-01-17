@@ -1,7 +1,7 @@
 # AsciiAtrMaker app
 
 <div align="center">
-  <img src="" alt="App logo">
+  <img width="4400" height="2474" alt="logo_ascii" src="https://github.com/user-attachments/assets/617eb892-0f2f-4eb4-b551-9eb16075b7b4" />
 </div>
 
 ![Python](https://img.shields.io/badge/Python-3.10+-548af7?style=for-the-badge)
