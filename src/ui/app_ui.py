@@ -19,7 +19,7 @@ def main(page: ft.Page):
 
     current_file = Path(__file__).resolve()
     fonts_dir = current_file.parent.parent / "assets" / "fonts"
-    icon_dir = str(current_file.parent.parent / "assets" / "icon.png")
+    icon_dir = str(current_file.parent.parent / "assets" / "images" / "icon.png")
 
     alphabet_dict = {
         "Детализированный": [
@@ -109,6 +109,9 @@ def main(page: ft.Page):
         col={"xs": 12, "sm": 6, "md": 4, "lg": 2.4, "xl": 2.4},
     )
 
+    async def save_png_handler(e):
+        await app.handle_save_file("png")
+
     save_button = ft.OutlinedButton(
         content=ft.Row([
             ft.Icon(ft.Icons.DOWNLOAD, size=20),
@@ -116,10 +119,13 @@ def main(page: ft.Page):
         ], alignment=ft.MainAxisAlignment.CENTER, spacing=8),
         style=button_style,
         disabled=True,
-        on_click=app.handle_save_png,
+        on_click=save_png_handler,
         height=50,
         col={"xs": 12, "sm": 6, "md": 4, "lg": 2.4, "xl": 2.4},
     )
+
+    async def save_txt_handler(e):
+        await app.handle_save_file("txt")
 
     save_text_button = ft.OutlinedButton(
         content=ft.Row([
@@ -128,6 +134,7 @@ def main(page: ft.Page):
         ], alignment=ft.MainAxisAlignment.CENTER, spacing=8),
         style=button_style,
         disabled=True,
+        on_click=save_txt_handler,
         height=50,
         col={"xs": 12, "sm": 6, "md": 4, "lg": 2.4, "xl": 2.4},
     )
@@ -139,6 +146,7 @@ def main(page: ft.Page):
         ], alignment=ft.MainAxisAlignment.CENTER, spacing=8),
         style=button_style,
         disabled=True,
+        on_click=app.handle_copy_text,
         height=50,
         col={"xs": 12, "sm": 6, "md": 4, "lg": 2.4, "xl": 2.4},
     )
@@ -208,9 +216,9 @@ def main(page: ft.Page):
         page.update()
 
     scale_slider = ft.Slider(
-        min=0.02,
-        max=0.5,
-        divisions=24,
+        min=0.1,
+        max=0.4,
+        divisions=15,
         value=0.1,
         on_change=slider_changed,
         active_color=ft.Colors.BLUE,

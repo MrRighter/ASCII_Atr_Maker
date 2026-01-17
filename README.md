@@ -1,5 +1,21 @@
 # AsciiAtrMaker app
 
+<div align="center">
+  <img src="" alt="App logo">
+</div>
+
+![Python](https://img.shields.io/badge/Python-3.10+-548af7?style=for-the-badge)
+![Flet](https://img.shields.io/badge/Flet-0.80.0+-ee3167?style=for-the-badge)
+![Pillow](https://img.shields.io/badge/Pillow-12.0.0+-b43879?style=for-the-badge)
+
+![Android](https://img.shields.io/badge/Android-2ea965?style=for-the-badge&logo=android&logoColor=white)
+![IOS](https://img.shields.io/badge/IOS-000000?style=for-the-badge&logo=ios&logoColor=white)
+![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white&style=for-the-badge)
+![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black&style=for-the-badge)
+![Windows](https://custom-icon-badges.demolab.com/badge/Windows-0078d4?style=for-the-badge&logo=windows-11&logoColor=white)
+
+## Installing
+
 ```
 pip install -r requirements.txt
 ```

@@ -2,7 +2,8 @@ from pathlib import Path
 from PIL import Image, ImageFont, ImageDraw
 
 
-def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str) -> Image.Image:
+def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str) \
+        -> tuple[Image.Image, str]:
     """
     Выполняет преобразование фото в ASCII рисунок.
 
@@ -14,7 +15,7 @@ def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str
         filling: цветовое заполнение
 
     Returns:
-        image: готовый ASCII рисунок
+        tuple: готовый ASCII рисунок, текстовый файл с ASCII рисунком
     """
 
     image = image.convert("RGB")
@@ -45,6 +46,8 @@ def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str
     ascii_art = Image.new("RGB", (ascii_width, ascii_height), "black")
     draw = ImageDraw.Draw(ascii_art)  # модуль, рисующий на фото
 
+    text_art = ""
+
     for i in range(new_height):
         for j in range(new_width):
             r, g, b = pixels[j, i]
@@ -63,7 +66,7 @@ def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str
             else:
                 draw.text((x, y), char, font=font, fill=(255, 255, 255))
 
-        #     text_atr.write(char)
-        # text_atr.write("\n")
+            text_art += char
+        text_art += "\n"
 
-    return ascii_art
+    return ascii_art, text_art

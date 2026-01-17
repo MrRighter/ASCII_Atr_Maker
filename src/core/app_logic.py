@@ -17,6 +17,7 @@ class AppLogic:
         self.page = page
         self.current_image: Optional[Image.Image] = None
         self.final_image: Optional[Image.Image] = None
+        self.final_text_file = ""
         self.original_name = ""
 
         self.open_button = None
@@ -60,7 +61,7 @@ class AppLogic:
             )
         )
 
-    async def handle_pick_file(self, e=None):
+    async def handle_pick_file(self):
         """Выбираем и загружаем выбранный файл в программу"""
         original_file = await ft.FilePicker().pick_files(
             allow_multiple=False,
@@ -76,24 +77,44 @@ class AppLogic:
         else:
             await self.show_snackbar(f"Изображение не выбрано")
 
-    async def handle_save_png(self, e=None):
-        """Скачиваем преобразованное фото в Загрузки"""
+    async def handle_save_file(self, save_type: str):
+        """Скачиваем файл (PNG или TXT) в Загрузки"""
         downloads_path = str(Path.home() / "Downloads") if os.path.exists(str(Path.home() / "Downloads")) \
             else "/storage/emulated/0/Download"
-        new_file_name = f"AsciiArt_{self.original_name}.png"
+
+        if save_type == "png":
+            prefix = "AsciiArt_"
+            ext = ".png"
+        else:
+            prefix = "AsciiArt_Text_"
+            ext = ".txt"
+
+        new_file_name = f"{prefix}{self.original_name}{ext}"
         new_file_path = os.path.join(downloads_path, new_file_name)
 
         counter = 1
         while os.path.exists(new_file_path):
-            new_file_name = f"AsciiArt_{self.original_name}_{counter}.png"
+            new_file_name = f"{prefix}{self.original_name}_{counter}{ext}"
             new_file_path = os.path.join(downloads_path, new_file_name)
             counter += 1
 
         try:
-            self.final_image.save(new_file_path)
-            await self.show_snackbar(f"Изображение успешно сохранено в '{new_file_path}'")
+            if save_type == "png":
+                self.final_image.save(new_file_path)
+            else:
+                with open(new_file_path, "w+", encoding="utf-8") as f:
+                    f.write(self.final_text_file)
+            await self.show_snackbar(f"Файл успешно сохранён в '{new_file_path}'")
         except Exception as e:
             await self.show_snackbar(f"Ошибка при сохранении: {e}")
+
+    async def handle_copy_text(self):
+        """Копируем текстовый файл в буфер обмена"""
+        try:
+            await ft.Clipboard().set(self.final_text_file)
+            await self.show_snackbar(f"Файл успешно скопирован")
+        except Exception as e:
+            await self.show_snackbar(f"Ошибка при копировании: {e}")
 
     async def update_image_view(self, img_obj: Image.Image):
         """Рисуем преобразованное изображение на экране"""
@@ -103,7 +124,8 @@ class AppLogic:
         self.image_view.src = base64_img
 
     @staticmethod
-    def ascii_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str) -> Image.Image:
+    def ascii_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str) \
+            -> tuple[Image.Image, str]:
         """Выполняет преобразование фото в ASCII рисунок"""
         result = photo_converter(
             image=image,
@@ -115,14 +137,14 @@ class AppLogic:
 
         return result
 
-    async def handle_ascii_converter(self, e=None):
+    async def handle_ascii_converter(self):
         """Обработка преобразования изображения"""
         self.progress_bar.visible = True
         self.loading_text.visible = True
         self.page.update()
 
         try:
-            self.final_image = await asyncio.to_thread(
+            self.final_image, self.final_text_file = await asyncio.to_thread(
                 self.ascii_converter, self.current_image, self.scale, self.chars, self.name_font, self.filling
             )
             await self.update_image_view(self.final_image)
