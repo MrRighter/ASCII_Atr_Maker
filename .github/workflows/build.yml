@@ -43,7 +43,6 @@ jobs:
 
       - name: Flet Build Linux
         run: |
-          python -m pip install --upgrade pip
           flet build linux -v --cleanup-app --clear-cache --yes
 
       - name: Upload Linux Artifact
@@ -75,7 +74,6 @@ jobs:
 
       - name: Flet Build Windows
         run: |
-          python -m pip install --upgrade pip
           flet build windows -v --cleanup-app --clear-cache --yes
 
       - name: Upload Windows Artifact
@@ -104,7 +102,6 @@ jobs:
 
       - name: Flet Build macOS
         run: |
-          python -m pip install --upgrade pip
           flet build macos -v --cleanup-app --clear-cache --yes
 
       - name: Upload macOS Artifact
@@ -133,7 +130,6 @@ jobs:
 
       - name: Flet Build APK
         run: |
-          python -m pip install --upgrade pip
           flutter doctor --android-licenses
           flet build apk -v --cleanup-app --clear-cache --yes
 
@@ -163,7 +159,6 @@ jobs:
 
       - name: Flet Build IPA
         run: |
-          python -m pip install --upgrade pip
           flutter doctor --android-licenses
           flet build ipa -v --cleanup-app --clear-cache --yes
 
