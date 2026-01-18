@@ -8,7 +8,7 @@
 ![Flet](https://img.shields.io/badge/Flet-0.80.0+-ee3167?style=for-the-badge)
 ![Pillow](https://img.shields.io/badge/Pillow-12.0.0+-b43879?style=for-the-badge)
 
-![Android](https://img.shields.io/badge/Android-2ea965?style=for-the-badge&logo=android&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3ddc84?style=for-the-badge&logo=android&logoColor=white)
 ![IOS](https://img.shields.io/badge/IOS-000000?style=for-the-badge&logo=ios&logoColor=white)
 ![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white&style=for-the-badge)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black&style=for-the-badge)
