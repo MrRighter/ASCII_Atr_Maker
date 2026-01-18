@@ -128,6 +128,11 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
       - name: Flet Build APK
         run: |
           flutter doctor --android-licenses
@@ -156,6 +161,11 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
 
       - name: Flet Build IPA
         run: |
