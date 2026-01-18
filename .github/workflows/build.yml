@@ -135,11 +135,8 @@ jobs:
 
       - name: Accept Android licenses
         run: |
-          flutter doctor --android-licenses 2>&1 | while IFS= read -r line; do
-            if [[ $line == *"Review licenses that have not been accepted"* ]]; then
-              echo "y"
-            fi
-          done | flutter doctor --android-licenses
+          yes | sdkmanager --licenses || true
+          flutter doctor --android-licenses
 
       - name: Flet Build APK
         run: |
@@ -177,11 +174,8 @@ jobs:
 
       - name: Accept Android licenses
         run: |
-          flutter doctor --android-licenses 2>&1 | while IFS= read -r line; do
-            if [[ $line == *"Review licenses that have not been accepted"* ]]; then
-              echo "y"
-            fi
-          done | flutter doctor --android-licenses
+          yes | sdkmanager --licenses || true
+          flutter doctor --android-licenses
 
       - name: Flet Build IPA
         run: |
