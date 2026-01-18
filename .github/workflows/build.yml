@@ -133,6 +133,14 @@ jobs:
         with:
           flutter-version: '3.38.3'
 
+      - name: Accept Android licenses
+        run: |
+          flutter doctor --android-licenses 2>&1 | while IFS= read -r line; do
+            if [[ $line == *"Review licenses that have not been accepted"* ]]; then
+              echo "y"
+            fi
+          done | flutter doctor --android-licenses
+
       - name: Flet Build APK
         run: |
           flutter doctor --android-licenses
@@ -166,6 +174,14 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.38.3'
+
+      - name: Accept Android licenses
+        run: |
+          flutter doctor --android-licenses 2>&1 | while IFS= read -r line; do
+            if [[ $line == *"Review licenses that have not been accepted"* ]]; then
+              echo "y"
+            fi
+          done | flutter doctor --android-licenses
 
       - name: Flet Build IPA
         run: |
