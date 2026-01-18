@@ -12,14 +12,14 @@ def main(page: ft.Page):
     page.spacing = 10
     page.padding = 10
 
-    # Создаём логику и UI для приложения
+    # создаём логику и UI для приложения
     app = AppLogic(page)
 
     current_settings = {}
 
     current_file = Path(__file__).resolve()
     fonts_dir = current_file.parent.parent / "assets" / "fonts"
-    icon_dir = str(current_file.parent.parent / "assets" / "images" / "icon.png")
+    icon_dir = str(current_file.parent.parent / "assets" / "icon.png")
 
     alphabet_dict = {
         "Детализированный": [
@@ -70,7 +70,7 @@ def main(page: ft.Page):
         ],
     }
 
-    # Создаем стилизованные кнопки с иконками и градиентами
+    # создаем стилизованные кнопки с иконками и градиентами
     button_style = ft.ButtonStyle(
         shape=ft.RoundedRectangleBorder(radius=12),
         padding=ft.Padding(16, 12, 16, 12),
@@ -85,7 +85,7 @@ def main(page: ft.Page):
         }
     )
 
-    # Создаем элементы UI
+    # создаем элементы UI
     open_button = ft.OutlinedButton(
         content=ft.Row([
             ft.Icon(ft.Icons.ADD_PHOTO_ALTERNATE, size=20),
@@ -109,7 +109,8 @@ def main(page: ft.Page):
         col={"xs": 12, "sm": 6, "md": 4, "lg": 2.4, "xl": 2.4},
     )
 
-    async def save_png_handler(e):
+    async def save_png_handler():
+        """Вызывает функцию сохранения файла с параметром 'png'"""
         await app.handle_save_file("png")
 
     save_button = ft.OutlinedButton(
@@ -124,7 +125,8 @@ def main(page: ft.Page):
         col={"xs": 12, "sm": 6, "md": 4, "lg": 2.4, "xl": 2.4},
     )
 
-    async def save_txt_handler(e):
+    async def save_txt_handler():
+        """Вызывает функцию сохранения файла с параметром 'txt'"""
         await app.handle_save_file("txt")
 
     save_text_button = ft.OutlinedButton(
@@ -151,7 +153,7 @@ def main(page: ft.Page):
         col={"xs": 12, "sm": 6, "md": 4, "lg": 2.4, "xl": 2.4},
     )
 
-    # Контейнер для изображения с эффектом свечения
+    # контейнер для изображения с эффектом свечения
     image_container = ft.Container(
         content=ft.Image(
             src=icon_dir,
@@ -188,7 +190,7 @@ def main(page: ft.Page):
         col={"xs": 12, "sm": 9, "md": 8, "lg": 7, "xl": 6},
     )
 
-    # Улучшенная кнопка настроек
+    # боковая кнопка настроек
     page.floating_action_button = ft.FloatingActionButton(
         tooltip="Настройки изображения",
         bgcolor=ft.Colors.BLUE,
@@ -298,7 +300,7 @@ def main(page: ft.Page):
         ],
     )
 
-    # Создаем карточки для каждой настройки
+    # создаем 'карточки' для каждой настройки
     scale_card = ft.Card(
         content=ft.Container(
             content=ft.Column([
@@ -308,7 +310,7 @@ def main(page: ft.Page):
                 ], spacing=8),
                 scale_slider,
                 ft.Container(
-                    message_scale := ft.Text("Масштаб: 0.10", size=14, color=ft.Colors.BLUE_GREY),
+                    message_scale := ft.Text("Масштаб: 0.1", size=14, color=ft.Colors.BLUE_GREY),
                     padding=ft.Padding(0, 4, 0, 0),
                 ),
             ], spacing=8),
@@ -375,7 +377,7 @@ def main(page: ft.Page):
         margin=ft.Margin(0, 0, 0, 10),
     )
 
-    # Улучшенное дополнительное окно с настройками
+    # дополнительное окно с настройками по нажатию боковой кнопки
     sheet = ft.BottomSheet(
         fullscreen=True,
         show_drag_handle=True,
@@ -401,7 +403,7 @@ def main(page: ft.Page):
         ),
     )
 
-    # Инициализируем все UI элементы
+    # инициализируем все UI элементы
     app.set_ui_elements(
         image_view=image_container.content,
         change_button=change_button,
@@ -416,7 +418,7 @@ def main(page: ft.Page):
         sheet=sheet,
     )
 
-    # Устанавливаем значения по умолчанию
+    # устанавливаем значения по умолчанию
     current_settings = {
         "scale": scale_slider.value,
         "chars": alphabet_dict[alfabet_dropdown.value][1],
@@ -424,10 +426,10 @@ def main(page: ft.Page):
         "filling": filling_dict[filling_dropdown.value][1],
     }
 
-    # Инициализируем настройки для будущего фото
+    # инициализируем настройки для будущего фото
     app.set_settings(**current_settings)
 
-    # Добавляем элементы на страницу
+    # добавляем элементы на страницу
     page.add(
         ft.Container(
             content=ft.ListView(
