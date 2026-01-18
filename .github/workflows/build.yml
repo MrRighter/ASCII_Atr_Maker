@@ -43,7 +43,8 @@ jobs:
 
       - name: Flet Build Linux
         run: |
-          flet build linux -v --cleanup-app --clear-cache
+          python -m pip install --upgrade pip
+          flet build linux -v --cleanup-app --clear-cache --yes
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
@@ -74,7 +75,8 @@ jobs:
 
       - name: Flet Build Windows
         run: |
-          flet build windows -v --cleanup-app --clear-cache
+          python -m pip install --upgrade pip
+          flet build windows -v --cleanup-app --clear-cache --yes
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
@@ -102,7 +104,8 @@ jobs:
 
       - name: Flet Build macOS
         run: |
-          flet build macos -v --cleanup-app --clear-cache
+          python -m pip install --upgrade pip
+          flet build macos -v --cleanup-app --clear-cache --yes
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
@@ -130,7 +133,8 @@ jobs:
 
       - name: Flet Build APK
         run: |
-          flet build apk -v --cleanup-app --clear-cache
+          python -m pip install --upgrade pip
+          flet build apk -v --cleanup-app --clear-cache --yes
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -158,7 +162,8 @@ jobs:
 
       - name: Flet Build IPA
         run: |
-          flet build ipa -v --cleanup-app --clear-cache
+          python -m pip install --upgrade pip
+          flet build ipa -v --cleanup-app --clear-cache --yes
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
