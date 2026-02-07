@@ -2,7 +2,7 @@ from pathlib import Path
 from PIL import Image, ImageFont, ImageDraw
 
 
-def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str) \
+def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str, filling: str, free_space: int) \
         -> tuple[Image.Image, str]:
     """
     Выполняет преобразование фото в ASCII рисунок.
@@ -13,6 +13,7 @@ def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str
         chars: набор символов для заполнения
         name_font: путь к шрифту, который идёт на вход
         filling: цветовое заполнение
+        free_space: влияет на свободное пространство между символами
 
     Returns:
         tuple: готовый ASCII рисунок, текстовый файл с ASCII рисунком
@@ -36,7 +37,7 @@ def photo_converter(image: Image.Image, scale: float, chars: str, name_font: str
     font_size = int(scale * 200)
     font = ImageFont.truetype(font=name_font, size=font_size)
 
-    char_width = (font_size // ratio_font) + 2
+    char_width = (font_size // ratio_font) + free_space
     char_height = char_width * ratio_font
     # финальные и настоящие размеры готового изображения
     # почти один в один с оригинальным фото

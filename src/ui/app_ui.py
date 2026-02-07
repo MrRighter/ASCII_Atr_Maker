@@ -31,26 +31,34 @@ def main(page: ft.Page):
             "#8XOHLTI)i=+;:,. "[::-1],
         ],
         "Блочный": [
-            "Подойдёт любое фото с любым фильтром и блочным шрифтом",
+            "Подойдёт любое фото с любым фильтром и 'универсальным' шрифтом",
             "█▓▒░ "[::-1],
+        ],
+        "Круглый": [
+            "Подойдёт любое фото с любым фильтром и 'универсальным' шрифтом",
+            "●",
+        ],
+        "Пиксельный": [
+            "Подойдёт любое фото с любым фильтром и 'универсальным' шрифтом",
+            "█",
         ],
     }
 
     font_dict = {
         "RobotoMono": [
-            "Шрифт для заполнения обычными символами клавиатуры",
+            "Шрифт для заполнения картинки обычными символами c клавиатуры",
             fonts_dir / "RobotoMono.ttf",
         ],
         "GothicA1": [
-            "Первый из подвида блочных шрифтов",
+            "Первый из подвида 'универсальных' шрифтов",
             fonts_dir / "GothicA1.ttf",
         ],
         "MPLUS1p": [
-            "Второй из подвида блочных шрифтов",
+            "Второй из подвида 'универсальных' шрифтов",
             fonts_dir / "MPLUS1p.ttf",
         ],
         "NotoSansJP": [
-            "Третий из подвида блочных шрифтов",
+            "Третий из подвида 'универсальных' шрифтов",
             fonts_dir / "NotoSansJP.ttf",
         ],
     }
@@ -248,6 +256,8 @@ def main(page: ft.Page):
             ft.dropdownm2.Option("Детализированный"),
             ft.dropdownm2.Option("Простой"),
             ft.dropdownm2.Option("Блочный"),
+            ft.dropdownm2.Option("Круглый"),
+            ft.dropdownm2.Option("Пиксельный"),
         ],
     )
 
@@ -300,6 +310,17 @@ def main(page: ft.Page):
         ],
     )
 
+    def free_space_switch_changed(e: ft.Event[ft.Switch]):
+        """Меняет значение переменной в зависимости от тумблера"""
+        switch_value = 2 if e.control.value else 0
+        message_switch.value = (f"Значение переключателя влияет на расстояние между символами\n"
+                                f"P.S.: рекомендуется не выключать для алфавитов из обычных символов")
+        current_settings['free_space'] = switch_value
+        app.set_settings(**current_settings)
+        page.update()
+
+    free_space_switch = ft.Switch(value=True, on_change=free_space_switch_changed)
+
     # создаем 'карточки' для каждой настройки
     scale_card = ft.Card(
         content=ft.Container(
@@ -310,14 +331,15 @@ def main(page: ft.Page):
                 ], spacing=8),
                 scale_slider,
                 ft.Container(
-                    message_scale := ft.Text("Масштаб: 0.1", size=14, color=ft.Colors.BLUE_GREY),
+                    message_scale := ft.Text("Масштаб: 0.1", size=14, color=ft.Colors.BLUE_GREY_400),
                     padding=ft.Padding(0, 4, 0, 0),
                 ),
             ], spacing=8),
             padding=ft.Padding(16, 12, 16, 12),
         ),
-        elevation=10,
-        margin=ft.Margin(0, 0, 0, 10),
+        elevation=3,
+        margin=ft.Margin(0, 0, 0, 8),
+        bgcolor=ft.Colors.SURFACE_DIM,
     )
 
     alphabet_card = ft.Card(
@@ -329,14 +351,15 @@ def main(page: ft.Page):
                 ], spacing=8),
                 alfabet_dropdown,
                 ft.Container(
-                    message_alfabet := ft.Text(alphabet_dict["Простой"][0], size=13, color=ft.Colors.BLUE_GREY),
+                    message_alfabet := ft.Text(alphabet_dict["Простой"][0], size=13, color=ft.Colors.BLUE_GREY_400),
                     padding=ft.Padding(0, 4, 0, 0),
                 ),
             ], spacing=8),
             padding=ft.Padding(16, 12, 16, 12),
         ),
-        elevation=10,
-        margin=ft.Margin(0, 0, 0, 10),
+        elevation=3,
+        margin=ft.Margin(0, 0, 0, 8),
+        bgcolor=ft.Colors.SURFACE_DIM,
     )
 
     font_card = ft.Card(
@@ -348,14 +371,15 @@ def main(page: ft.Page):
                 ], spacing=8),
                 font_dropdown,
                 ft.Container(
-                    message_font := ft.Text(font_dict["RobotoMono"][0], size=13, color=ft.Colors.BLUE_GREY),
+                    message_font := ft.Text(font_dict["RobotoMono"][0], size=13, color=ft.Colors.BLUE_GREY_400),
                     padding=ft.Padding(0, 4, 0, 0),
                 ),
             ], spacing=8),
             padding=ft.Padding(16, 12, 16, 12),
         ),
-        elevation=10,
-        margin=ft.Margin(0, 0, 0, 10),
+        elevation=3,
+        margin=ft.Margin(0, 0, 0, 8),
+        bgcolor=ft.Colors.SURFACE_DIM,
     )
 
     color_card = ft.Card(
@@ -367,14 +391,35 @@ def main(page: ft.Page):
                 ], spacing=8),
                 filling_dropdown,
                 ft.Container(
-                    message_filling := ft.Text(filling_dict["Разноцветное фото"][0], size=13, color=ft.Colors.BLUE_GREY),
+                    message_filling := ft.Text(filling_dict["Разноцветное фото"][0], size=13, color=ft.Colors.BLUE_GREY_400),
                     padding=ft.Padding(0, 4, 0, 0),
                 ),
             ], spacing=8),
             padding=ft.Padding(16, 12, 16, 12),
         ),
-        elevation=10,
-        margin=ft.Margin(0, 0, 0, 10),
+        elevation=3,
+        margin=ft.Margin(0, 0, 0, 8),
+        bgcolor=ft.Colors.SURFACE_DIM,
+    )
+
+    free_space_card = ft.Card(
+        content=ft.Container(
+            content=ft.Column([
+                ft.Row([
+                    ft.Icon(ft.Icons.SWITCH_RIGHT, size=20, color=ft.Colors.BLUE),
+                    ft.Text("Свободное пространство между символами", size=16, weight=ft.FontWeight.W_600),
+                ], spacing=8),
+                free_space_switch,
+                ft.Container(
+                    message_switch := ft.Text("Значение переключателя влияет на расстояние между символами", size=14, color=ft.Colors.BLUE_GREY_400),
+                    padding=ft.Padding(0, 4, 0, 0),
+                ),
+            ], spacing=8),
+            padding=ft.Padding(16, 12, 16, 12),
+        ),
+        elevation=3,
+        margin=ft.Margin(0, 0, 0, 8),
+        bgcolor=ft.Colors.SURFACE_DIM,
     )
 
     # дополнительное окно с настройками по нажатию боковой кнопки
@@ -396,6 +441,7 @@ def main(page: ft.Page):
                     alphabet_card,
                     font_card,
                     color_card,
+                    free_space_card,
                 ],
                 scroll=ft.ScrollMode.AUTO,
                 spacing=4,
@@ -415,6 +461,7 @@ def main(page: ft.Page):
         scale_slider=scale_slider,
         alfabet_dropdown=alfabet_dropdown,
         font_dropdown=font_dropdown,
+        free_space_switch=free_space_switch,
         sheet=sheet,
     )
 
@@ -424,6 +471,7 @@ def main(page: ft.Page):
         "chars": alphabet_dict[alfabet_dropdown.value][1],
         "name_font": font_dict[font_dropdown.value][1],
         "filling": filling_dict[filling_dropdown.value][1],
+        "free_space": free_space_switch.value,
     }
 
     # инициализируем настройки для будущего фото

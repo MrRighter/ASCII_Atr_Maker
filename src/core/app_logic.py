@@ -38,6 +38,7 @@ class AppLogic:
         self.chars: str = ""
         self.name_font: str = ""
         self.filling: str = ""
+        self.free_space: int = 0
 
     def set_ui_elements(self, **elements):
         """Устанавливает ссылки на UI-элементы"""
@@ -145,7 +146,8 @@ class AppLogic:
                 self.scale,
                 self.chars,
                 self.name_font,
-                self.filling
+                self.filling,
+                self.free_space,
             )
             await self.update_image_view(self.final_image)
             self.save_button.disabled = False
