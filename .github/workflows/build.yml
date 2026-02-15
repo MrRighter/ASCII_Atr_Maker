@@ -104,7 +104,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            artifacts/windows-build-artifact/build/windows/**
-            artifacts/apk-build-artifact/build/apk/app-release.apk
+            artifacts/windows-build-artifact/**
+            artifacts/apk-build-artifact/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
