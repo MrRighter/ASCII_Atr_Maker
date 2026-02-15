@@ -97,12 +97,14 @@ jobs:
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            build/windows
-            build/apk/app-release.apk
+            artifacts/windows-build-artifact/build/windows/**
+            artifacts/apk-build-artifact/build/apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
