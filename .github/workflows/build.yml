@@ -91,7 +91,7 @@ jobs:
           overwrite: false
 
   create-release:
-    needs: [build-apk]  # build-windows
+    needs: [build-apk, build-windows]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     steps:
