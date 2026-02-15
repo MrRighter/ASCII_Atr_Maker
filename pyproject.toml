@@ -1,6 +1,6 @@
 [project]
 name = "AsciiArtMaker"
-version = "1.0.0"
+version = "1.1.1"
 description = "Приложение, основанное на Flet, для конвертации фото в ASCII рисунок (фото, состоящее из символов)."
 readme = "README.md"
 license-files = [
