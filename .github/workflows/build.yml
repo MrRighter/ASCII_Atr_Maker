@@ -33,13 +33,18 @@ jobs:
         run: |
           flet build windows -v --cleanup-app --clear-cache --yes
 
-      - name: Upload Windows Artifact
+      - name: Create Windows ZIP archive
+        run: |
+          cd build/windows
+          Compress-Archive -Path * -DestinationPath ${{ github.workspace }}/windows-app.zip
+        shell: pwsh
+
+      - name: Upload Windows Artifact (ZIP)
         uses: actions/upload-artifact@v4
         with:
           name: windows-build-artifact
-          path: build/windows
+          path: windows-app.zip
           if-no-files-found: warn
-          overwrite: false
 
   build-apk:
     runs-on: ubuntu-latest
@@ -104,7 +109,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            artifacts/windows-build-artifact/**
+            artifacts/windows-build-artifact/windows-app.zip
             artifacts/apk-build-artifact/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
