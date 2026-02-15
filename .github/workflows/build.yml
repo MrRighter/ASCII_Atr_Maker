@@ -124,10 +124,15 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          ./sdkmanager --licenses -y --yes
+
+      - name: Accept Android SDK licenses
+        run: sdkmanager --licenses
 
       - name: Flet Build APK
         run: |
