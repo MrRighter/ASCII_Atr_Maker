@@ -136,7 +136,6 @@ jobs:
 
       - name: Flet Build APK
         run: |
-          flutter doctor --android-licenses
           flet build apk -v --cleanup-app --clear-cache --yes
 
       - name: Upload APK Artifact
