@@ -10,49 +10,6 @@ permissions:
   contents: write
 
 jobs:
-#  build-linux:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup Python
-#        uses: actions/setup-python@v5
-#        with:
-#          python-version: '3.11'
-#
-#      - name: Install Linux dependencies
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install -y \
-#            libgtk-3-dev \
-#            libglib2.0-dev \
-#            libcairo2-dev \
-#            libpango1.0-dev \
-#            libgdk-pixbuf2.0-dev \
-#            libatk1.0-dev \
-#            ninja-build \
-#            pkg-config \
-#            clang \
-#            cmake
-#
-#      - name: Install dependencies
-#        run: |
-#          pip install -r requirements.txt
-#
-#      - name: Flet Build Linux
-#        run: |
-#          flet build linux -v --cleanup-app --clear-cache --yes
-#
-#      - name: Upload Linux Artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: linux-build-artifact
-#          path: build/linux
-#          if-no-files-found: warn
-#          overwrite: false
-#
 #  build-windows:
 #    runs-on: windows-latest
 #
@@ -83,34 +40,6 @@ jobs:
 #          path: build/windows
 #          if-no-files-found: warn
 #          overwrite: false
-#
-#  build-macos:
-#    runs-on: macos-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup Python
-#        uses: actions/setup-python@v5
-#        with:
-#          python-version: '3.11'
-#
-#      - name: Install dependencies
-#        run: |
-#          pip install -r requirements.txt
-#
-#      - name: Flet Build macOS
-#        run: |
-#          flet build macos -v --cleanup-app --clear-cache --yes
-#
-#      - name: Upload macOS Artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: macos-build-artifact
-#          path: build/macos
-#          if-no-files-found: warn
-#          overwrite: false
 
   build-apk:
     runs-on: ubuntu-latest
@@ -123,6 +52,21 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-3-dev \
+            libglib2.0-dev \
+            libcairo2-dev \
+            libpango1.0-dev \
+            libgdk-pixbuf2.0-dev \
+            libatk1.0-dev \
+            ninja-build \
+            pkg-config \
+            clang \
+            cmake
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
@@ -146,37 +90,8 @@ jobs:
           if-no-files-found: warn
           overwrite: false
 
-#  build-ipa:
-#    runs-on: macos-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup Python
-#        uses: actions/setup-python@v5
-#        with:
-#          python-version: '3.11'
-#
-#      - name: Install dependencies
-#        run: |
-#          pip install -r requirements.txt
-#
-#      - name: Flet Build IPA
-#        run: |
-#          flutter doctor --android-licenses
-#          flet build ipa -v --cleanup-app --clear-cache --yes
-#
-#      - name: Upload IPA Artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: ipa-build-artifact
-#          path: build/ipa
-#          if-no-files-found: warn
-#          overwrite: false
-
   create-release:
-    needs: [build-apk]  # build-linux, build-windows, build-macos, , build-ipa
+    needs: [build-apk]  # build-windows
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     steps:
@@ -187,10 +102,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            build/linux
             build/windows
-            build/macos
             build/apk
-            build/ipa
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
